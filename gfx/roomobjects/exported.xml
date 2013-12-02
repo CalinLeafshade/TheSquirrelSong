@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="VigLib.Library">
+    <Vignettes>
+      <Item>
+        <Name>A Gentleman Calls</Name>
+        <Subtitle>You are in your room when you hear a knock at the door.</Subtitle>
+        <Location>2</Location>
+        <Events>
+          <Item Type="VigLib.Question">
+            <Text>You have $gender(rented a fancy tux|found a beautiful dress) to wear for the prom and you are feeling $mood(miserable|sad|ok|fantastic).</Text>
+            <ID>1</ID>
+            <Parents />
+            <StartNode>true</StartNode>
+            <Answers>2 3</Answers>
+          </Item>
+          <Item Type="VigLib.Answer">
+            <Text>Default Text</Text>
+            <ID>2</ID>
+            <Parents>1</Parents>
+            <StartNode>false</StartNode>
+            <LinkedEvent>4</LinkedEvent>
+          </Item>
+          <Item Type="VigLib.Answer">
+            <Text>Default Text</Text>
+            <ID>3</ID>
+            <Parents>1</Parents>
+            <StartNode>false</StartNode>
+            <LinkedEvent>4</LinkedEvent>
+          </Item>
+          <Item Type="VigLib.Script">
+            <Text>if (lastID == 2) {
+session.SetLocalVar("answer", "first");
+}
+else 
+{
+session.SetLocalVar("answer", "second");
+}
+return 0;
+</Text>
+            <ID>4</ID>
+            <Parents>2 3</Parents>
+            <StartNode>false</StartNode>
+            <linkedEvents>5</linkedEvents>
+          </Item>
+          <Item Type="VigLib.Question">
+            <Text>Your mum looks at you, her eyes narrowed in suspiscion. $print(answer)</Text>
+            <ID>5</ID>
+            <Parents>4</Parents>
+            <StartNode>false</StartNode>
+            <Answers>7 8 9 10</Answers>
+          </Item>
+          <Item Type="VigLib.Answer">
+            <Text>Admit to your lie.</Text>
+            <ID>7</ID>
+            <Parents>5</Parents>
+            <StartNode>false</StartNode>
+            <LinkedEvent>-1</LinkedEvent>
+          </Item>
+          <Item Type="VigLib.Answer">
+            <Text>Say you are telling the truth in a nonchalant fashion.</Text>
+            <ID>8</ID>
+            <Parents>5</Parents>
+            <StartNode>false</StartNode>
+            <LinkedEvent>-1</LinkedEvent>
+          </Item>
+          <Item Type="VigLib.Answer">
+            <Text>Promise your mum you aren't lying.</Text>
+            <ID>9</ID>
+            <Parents>5</Parents>
+            <StartNode>false</StartNode>
+            <LinkedEvent>-1</LinkedEvent>
+          </Item>
+          <Item Type="VigLib.Answer">
+            <Text>Swear on the dog's life you are telling the truth.</Text>
+            <ID>10</ID>
+            <Parents>5</Parents>
+            <StartNode>false</StartNode>
+            <LinkedEvent>-1</LinkedEvent>
+          </Item>
+        </Events>
+      </Item>
+    </Vignettes>
+    <Rooms>
+      <Item>
+        <ID>1</ID>
+        <Name>livingroom1</Name>
+        <Sprites>
+          <Item>
+            <Name>couple.png</Name>
+            <Z>-10</Z>
+            <X>1.629999</X>
+            <Y>0</Y>
+            <ID>1</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>sideboard_wood_dingy.png</Name>
+            <Z>-12.28</Z>
+            <X>3.009997</X>
+            <Y>0</Y>
+            <ID>2</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>chair_green_soft_chrome.png</Name>
+            <Z>-11.6799984</Z>
+            <X>4.95001745</X>
+            <Y>-1.27999926</Y>
+            <ID>3</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>chair_beige_soft.png</Name>
+            <Z>-11.9199982</Z>
+            <X>0.09999988</X>
+            <Y>-0.220000133</Y>
+            <ID>4</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>ceiling_light_white_balls_chrome.png</Name>
+            <Z>-10</Z>
+            <X>-1.589999</X>
+            <Y>6.570008</Y>
+            <ID>6</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>fireplace_lol.png</Name>
+            <Z>-11.079999</Z>
+            <X>-6.66000271</X>
+            <Y>0.5599999</Y>
+            <ID>7</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>bg_orange_blue.png</Name>
+            <Z>-12.3999977</Z>
+            <X>-5.701929E-07</X>
+            <Y>-2.779998</Y>
+            <ID>5</ID>
+            <Scale>1.5</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>side_table_phone.png</Name>
+            <Z>-10.7199993</Z>
+            <X>-4.1799984</X>
+            <Y>0.479999065</Y>
+            <ID>8</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>sofa_chairs_brown_yellow.png</Name>
+            <Z>-10.24</Z>
+            <X>-2.38999867</X>
+            <Y>-1.3199991</Y>
+            <ID>9</ID>
+            <Scale>1.1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>table_coffee_light_wood.png</Name>
+            <Z>-8.560001</Z>
+            <X>0.0299999285</X>
+            <Y>-0.7299998</Y>
+            <ID>10</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>table_yellow_floral.png</Name>
+            <Z>-11.9199982</Z>
+            <X>7.83001041</X>
+            <Y>0.219999865</Y>
+            <ID>11</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>wall_mirror_oval_gold.png</Name>
+            <Z>-11.3199987</Z>
+            <X>-6.64000273</X>
+            <Y>5.41000366</Y>
+            <ID>12</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>rug_yellow_brown_sunburst.png</Name>
+            <Z>-10.24</Z>
+            <X>-4.10999632</X>
+            <Y>-3.109998</Y>
+            <ID>13</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+        </Sprites>
+        <AccentR>0</AccentR>
+        <AccentG>0</AccentG>
+        <AccentB>0</AccentB>
+      </Item>
+      <Item>
+        <ID>2</ID>
+        <Name>kitchen1</Name>
+        <Sprites>
+          <Item>
+            <Name>mm2_0010_bg.png</Name>
+            <Z>-12.76</Z>
+            <X>1.11999762</X>
+            <Y>-2.259997</Y>
+            <ID>1</ID>
+            <Scale>1.4</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0006_units.png</Name>
+            <Z>-12.48</Z>
+            <X>3.87000084</X>
+            <Y>0.429999948</Y>
+            <ID>4</ID>
+            <Scale>1.3</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0007_window.png</Name>
+            <Z>-12.5</Z>
+            <X>2.659998</X>
+            <Y>6.16000462</Y>
+            <ID>5</ID>
+            <Scale>1.3</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0005_shelves.png</Name>
+            <Z>-12.24</Z>
+            <X>-6.200019</X>
+            <Y>-0.7000005</Y>
+            <ID>6</ID>
+            <Scale>1.3</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0000_kid.png</Name>
+            <Z>-10.64</Z>
+            <X>3.779998</X>
+            <Y>1.02999949</Y>
+            <ID>7</ID>
+            <Scale>1.1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0004_kid_desk.png</Name>
+            <Z>-10</Z>
+            <X>2.10999846</X>
+            <Y>0.0899999961</Y>
+            <ID>8</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0003_toy_plane.png</Name>
+            <Z>-9</Z>
+            <X>2.359999</X>
+            <Y>0.409999967</Y>
+            <ID>9</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0002_stickles.png</Name>
+            <Z>-9</Z>
+            <X>4.099998</X>
+            <Y>0.320000082</Y>
+            <ID>10</ID>
+            <Scale>1</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+          <Item>
+            <Name>mm2_0001_table.png</Name>
+            <Z>-8.199999</Z>
+            <X>-2.28000069</X>
+            <Y>-4.03999662</Y>
+            <ID>11</ID>
+            <Scale>0.8</Scale>
+            <Rotation>0</Rotation>
+            <IsBackground>false</IsBackground>
+          </Item>
+        </Sprites>
+        <AccentR>216</AccentR>
+        <AccentG>123</AccentG>
+        <AccentB>20</AccentB>
+      </Item>
+    </Rooms>
+  </Asset>
+</XnaContent>
