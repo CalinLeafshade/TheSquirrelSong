@@ -53,7 +53,7 @@ local testMap =
 
 mapScreen.cam = camera(0,0)
 mapScreen.time = 0
-mapScreen.font = love.graphics.newFont("fonts/border.ttf",64)
+mapScreen.font = love.graphics.newFont("fonts/border.ttf",48)
 
 local spot = love.graphics.newImage("gfx/out.png")
 local paper = love.graphics.newImage("gfx/paper.png")
@@ -80,9 +80,20 @@ function mapScreen:generateMap(vigList)
 		return node
 	end
 	
+	local colors = {}
+	
+	local start = math.random(255)
+	local sat = math.random(80,255)
+	local lit = math.random(100,200)
+	local diff = math.random(20,255/#vigList)
+	
+	for i=1, #vigList do
+		table.insert(colors, {HSL(start,sat,lit)})
+		start = (start + diff) % 255
+	end
 	
 	local function randomColor()
-		return { math.random(0,255), math.random(0,255), math.random(0,255) }
+		return table.remove(colors,1)
 	end
 	
 	local count = #vigList
