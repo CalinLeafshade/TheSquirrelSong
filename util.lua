@@ -13,6 +13,15 @@ function table.join(t,o)
 	end
 end
 
+function table.shuffled(tab)
+	local n, order, res = #tab, {}, {}
+ 
+	for i=1,n do order[i] = { rnd = math.random(), idx = i } end
+		table.sort(order, function(a,b) return a.rnd < b.rnd end)
+		for i=1,n do res[i] = tab[order[i].idx] end
+		return res
+	end
+
 function HSL(h, s, l, a)
     if s<=0 then return l,l,l,a end
     h, s, l = h/256*6, s/255, l/255

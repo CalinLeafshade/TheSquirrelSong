@@ -92,6 +92,8 @@ function mapScreen:generateMap(vigList)
 		start = (start + diff) % 255
 	end
 	
+	colors = table.shuffled({ {137,78,36},{220,36,31},{255,206,0},{0,114,41},{255,102,0},{215,153,175},{134,143,152},{117,16,86},{0,0,0},{0,25,168},{0,160,226} })
+	
 	local function randomColor()
 		return table.remove(colors,1)
 	end
@@ -168,7 +170,7 @@ function mapScreen:drawSpots()
 			v.size = v.size * 2
 		end
 		love.graphics.setBlendMode("premultiplied")
-		love.graphics.setColor(v.color)
+		love.graphics.setColor(0,0,0)
 		love.graphics.draw(spot,v.x,v.y,0,v.size,v.size,64,64)
 		--love.graphics.circle("fill",v.x,v.y,v.size,16,128)
 		love.graphics.setColor(255,255,255)
