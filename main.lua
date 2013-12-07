@@ -2,6 +2,7 @@
 require('util')
 class = require('hump.class')
 camera = require('hump.camera')
+vector = require('hump.vector')
 
 system = 
 {

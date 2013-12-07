@@ -3,62 +3,36 @@ local mapScreen = require('screen')()
 
 local maps = require('maps')
 
-local testMap = 
-		{
-			{ 
-				length = 700,
-				angle = "forward",
-				color = {0,0,0},
-				
-				{
-					type = "spot",
-					{
-						length = 500,
-						angle = "forward",
-						{
-							angle = "down",
-							length = 400
-						}
-					},
-					{
-						length = 500,
-						color = {255,0,0},
-						angle = "up",
-						{
-							length = 600,
-							angle = "forward",
-							
-						},
-						{
-							length = 300,
-							angle = "down",
-							{
-								length = 200,
-								angle = "forward",
-								{
-									type = "spot",
-									text = "A Gentleman Calls",
-									link = "gent"
-								}
-							},
-							
-						}
-					},
-				}
-					
-					
-			}
-		}
-	
-
 mapScreen.cam = camera(0,0)
 mapScreen.time = 0
 mapScreen.font = love.graphics.newFont("fonts/border.ttf",48)
+mapScreen.bits = {}
 
 local spot = love.graphics.newImage("gfx/out.png")
 local paper = love.graphics.newImage("gfx/paper.png")
 paper:setWrap("repeat","repeat")
 local paperQuad = love.graphics.newQuad(0,0,paper:getWidth() * 3, paper:getHeight() * 3, paper:getWidth(), paper:getHeight())
+
+local vigTypes = {
+		romantic = {
+				icon = love.graphics.newImage("gfx/heart.png"),
+				hue = { 250, 260 },
+				sat = { 255 * 0.27, 255 * 0.33 },
+				lit = {150,200}
+			},
+		intellectual = {
+				icon = love.graphics.newImage("gfx/bulb.png"),
+				hue = { 30, 40 },
+				sat = { 255 * 0.27, 255 * 0.33 },
+				lit = {150,200}
+			},
+		general = {
+				icon = love.graphics.newImage("gfx/star.png"),
+				hue = { 145,155 },
+				sat = { 255 * 0.27, 255 * 0.33 },
+				lit = {150,200}
+			},
+	}
 
 function mapScreen:registerSpot(size, x,y,col,text,link)
 	table.insert(self.spots, { size = size, x = x, y = y, color = col,text = text, link = link} )
@@ -189,6 +163,60 @@ function mapScreen:drawSpots()
 	
 end
 
+function mapScreen:newBit(x,y,t)
+	local hue = type(t.hue) == "number" and t.hue or math.random(t.hue[1], t.hue[2])
+	local sat = type(t.sat) == "number" and t.sat or math.random(t.sat[1], t.sat[2])
+	local lit = type(t.lit) == "number" and t.lit or math.random(t.lit[1], t.lit[2])
+	local item = 
+	{
+		position = vector(x,y),
+		velocity = vector((math.random() * (math.pi * 2) - math.pi) * 0.5,-math.random() * 5) * 100,
+		icon = t.icon,
+		rotation = math.random() * math.pi,
+		rotationalSpeed = math.random() * math.pi * 4,
+		scale = math.random() * 0.2 + 0.1,
+		color = {HSL(hue,sat,lit)},
+		time = love.timer.getTime()
+	}
+	table.insert(self.bits, item)
+end
+
+function mapScreen:blowOut(x,y,ty)
+	self.lastBlowOut = love.timer.getTime()
+	ty = table.random({"general","romantic","intellectual"})
+	if type(ty) == "string" then ty = vigTypes[ty] end
+	assert(ty, "type given invalid")
+	system.dispatch(false, function()
+				local t = 0
+				local lastItem = 0.1
+				while t < 1 do
+					while lastItem > 0.05 do
+						lastItem = lastItem - 0.05
+						mapScreen:newBit(x,y,ty)
+					end
+					local dt = coroutine.yield()
+					lastItem = lastItem + dt
+					t = t + dt
+				end
+			
+			end)
+end
+
+function mapScreen:drawBits()
+	for i,v in ipairs(self.bits or {}) do
+		love.graphics.setColor(v.color)
+		love.graphics.draw(v.icon, v.position.x, v.position.y, v.rotation, v.scale, v.scale, v.icon:getWidth() /2 , v.icon:getHeight() / 2)
+	end
+end
+
+function mapScreen:updateBits(dt)
+	for i,v in ipairs(self.bits or {}) do
+		v.velocity = v.velocity + vector(0,500) * dt
+		v.position = v.position + v.velocity * dt
+		v.rotation = v.rotation + v.rotationalSpeed * dt
+	end
+end
+
 function mapScreen:draw()
 	local lg = love.graphics
 	lg.setColor({255,255,255})
@@ -239,6 +267,7 @@ function mapScreen:draw()
 	--lg.translate(0,1080 / 2)
 	local energy = self.energy
 	if self.map then drawBranch(0,0, self.map, energy) end
+	self:drawBits()
 	self:drawSpots()
 	lg.pop()
 	self.cam:detach()
@@ -252,13 +281,20 @@ function mapScreen:update(dt)
 	mx,my = self.cam:worldCoords(mx,my)
 	--mx = mx - 300
 	--my = my - 180
+	local lastSelected = self.selected or -1
 	self.selected = -1
 	for i,v in ipairs(self.spots or {}) do
 		if math.abs(v.x - mx) < 50 and math.abs(v.y - my) < 50 and v.link then
 			self.selected = i
 		end
 	end
+	if self.selected > -1 and self.selected ~= lastSelected then -- and love.timer.getTime() - (self.lastBlowOut or 0) > 5 then
+		self:blowOut(self.spots[self.selected].x, self.spots[self.selected].y, "general")
+	end
+	self:updateBits(dt)
 end
+
+
 
 function mapScreen:keyPressed(key)
 	if key == "r" then
