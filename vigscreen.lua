@@ -12,6 +12,10 @@ slider.visible = false
 vigScreen:add(slider)
 
 slider:hookEvent("choiceSelected", function(choice)
+			if type(choice) == "string" and choice == "return" then
+				system.gotoMap()
+				return
+			end
 			choice = vigScreen.node[#vigScreen.node].choices[choice]
 			local gt = choice.gotoNode
 			if type(gt) == "function" then
@@ -61,7 +65,8 @@ function vigScreen:loadVignette(vig)
 	assert(vig, "vignette is nil")
 	self.vig = vig
 	self:loadScene(vig.scene)
-	
+	self.rects = nil
+	self.textShown = false
 	vigScreen:showNode(1)
 end
 
@@ -71,6 +76,10 @@ function vigScreen:showNode(n)
 	assert(self.node)
 	slider:setNode(self.node)
 	system.log(nil,"show node")
+end
+
+function vigScreen:onShow()
+	
 end
 
 function vigScreen:update(dt)

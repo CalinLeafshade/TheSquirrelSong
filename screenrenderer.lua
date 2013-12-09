@@ -37,9 +37,10 @@ end
 
 function screenRenderer:show(screen)
 	local i = self:getIndex(screen)
-	self.target = 1080 * (i-1)
+	self.targetY = 1080 * (i-1)
 	while math.abs(self.y - self.targetY) > 1 do
 		coroutine.yield()
+		system.log("loll", self.y)
 	end
 	self.y = self.targetY
 end

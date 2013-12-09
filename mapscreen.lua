@@ -280,6 +280,12 @@ function mapScreen:draw()
 	self.cam:detach()
 end
 
+function mapScreen:mousePressed(x,y,b)
+	if self.selected > -1 then
+		system.startVignette(self.spots[self.selected].link)
+	end
+end
+
 function mapScreen:update(dt)
 	self.energy = lerp(0,3000,self.time)
 	self.cam.x = 600 + smoothlerp(0,800,self.time)
@@ -311,6 +317,18 @@ function mapScreen:update(dt)
 	self:updateBits(dt)
 end
 
+function mapScreen:showMap()
+	local i = 0
+	while i < 1 do
+		mapScreen.time = i
+		i = i + coroutine.yield() / 2
+	end
+end
+
+function mapScreen:clear()
+	self.map = nil
+	self.time = 0
+end
 
 
 function mapScreen:keyPressed(key)

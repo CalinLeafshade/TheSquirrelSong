@@ -41,6 +41,17 @@ function system.load()
 	--system.startVignette("gent1")
 end
 
+
+function system.gotoMap()
+	system.dispatch(
+		function()
+			mapScreen:clear()
+			renderer:show(mapScreen)
+			mapScreen:generateMap({system.vignettes["gent1"],system.vignettes["gent1"],system.vignettes["gent1"]})
+			mapScreen:showMap()
+		end)
+end
+
 function system.startVignette(name)
 	system.dispatch( 
 		function()

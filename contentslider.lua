@@ -19,8 +19,15 @@ function contentSlider:setNode(node)
 	self.slides = {}
 	self.translation = 0
 	self.targetTranslation = 0
+	local allText = true
 	for i,v in ipairs(node) do
 		self.slides[i] = v
+		if type(v) ~= "string" then
+			allText = false
+		end
+	end
+	if allText then
+		self.slides[#self.slides] = { type = "end", text = self.slides[#self.slides] }
 	end
 end
 
@@ -41,7 +48,12 @@ end
 
 function contentSlider:onMouseReleased()
 	if self.mousedSelected and self.mousedSelected == self.selected and math.abs(self.translation - self.targetTranslation) < 10 then
-		self:fireEvent("choiceSelected", self.selected)
+		local i = self.selected
+		if self.hotspots[i].type and self.hotspots[i].type == "end" then
+			self:fireEvent("choiceSelected", "return")
+		else
+			self:fireEvent("choiceSelected", self.selected)
+		end
 	end
 end
 
@@ -97,7 +109,15 @@ function contentSlider:drawSlide(s,x)
 				lg.print(v.text, x + 30, y)
 				y = y + self.font:getHeight()
 			end
-		
+		elseif s.type == "end" then
+			lg.printf(s.text,x,0,self.width)
+			local _, h = self.font:getWrap(s.text, self.width) 
+			h = h * self.font:getHeight()
+			local y = h + self.font:getHeight()
+			self.hotspots = { { type = "end", x + 30, y, self.font:getWidth("Return"), self.font:getHeight()} }
+			local c = self.selected == 1 and {0,0,0} or {128,128,128}
+			lg.setColor(c)
+			lg.print("Return", x + 30, y)
 		end	
 	end
 end
