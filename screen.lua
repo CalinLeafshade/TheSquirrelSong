@@ -8,7 +8,7 @@ local screen = class{
 		onShow = NULLFUNC,
 		onHide = NULLFUNC,
 		keyPressed = NULLFUNC,
-		keyReleased = NULLFUNC
+		keyReleased = NULLFUNC,
 	}
 
 function screen:init()

@@ -98,10 +98,10 @@ function mapScreen:generateMap(vigList)
 				add(f, { length = {100,150}, angle = {"up", "down"}}),
 				{ length = {250,500}, angle = "forward", { type = "spot", link = true}})
 		end
-		add( add(firstSpot, { length = math.random(350,550), angle = ud, color = randomColor()}), { length = {300,700}, angle = "forward", { type = "spot", link = true }})
+		add( add(firstSpot, { length = math.random(250,550), angle = ud, color = randomColor()}), { length = {300,700}, angle = "forward", { type = "spot", link = true }})
 	end
 	if count > 2 then
-		add( add(firstSpot, { length = math.random(350,550), angle = ud == "up" and "down" or "up", color = randomColor()}), { length = {300,700}, angle = "forward", { type = "spot", link = true }})
+		add( add(firstSpot, { length = math.random(250,550), angle = ud == "up" and "down" or "up", color = randomColor()}), { length = {300,700}, angle = "forward", { type = "spot", link = true }})
 	end
 	
 	
@@ -144,7 +144,7 @@ function mapScreen:drawSpots()
 			v.size = v.size * 2
 		end
 		love.graphics.setBlendMode("premultiplied")
-		love.graphics.setColor(0,0,0)
+		love.graphics.setColor(v.color)
 		love.graphics.draw(spot,v.x,v.y,0,v.size,v.size,64,64)
 		--love.graphics.circle("fill",v.x,v.y,v.size,16,128)
 		love.graphics.setColor(255,255,255)
@@ -203,10 +203,12 @@ function mapScreen:blowOut(x,y,ty)
 			end)
 end
 
-function mapScreen:drawBits()
+function mapScreen:drawBits(overSpots)
 	for i,v in ipairs(self.bits or {}) do
-		love.graphics.setColor(v.color)
-		love.graphics.draw(v.icon, v.position.x, v.position.y, v.rotation, v.scale, v.scale, v.icon:getWidth() /2 , v.icon:getHeight() / 2)
+		if not overSpots or v.velocity.y > 0 then
+			love.graphics.setColor(v.color)
+			love.graphics.draw(v.icon, v.position.x, v.position.y, v.rotation, v.scale, v.scale, v.icon:getWidth() /2 , v.icon:getHeight() / 2)
+		end
 	end
 end
 
@@ -215,6 +217,9 @@ function mapScreen:updateBits(dt)
 		v.velocity = v.velocity + vector(0,500) * dt
 		v.position = v.position + v.velocity * dt
 		v.rotation = v.rotation + v.rotationalSpeed * dt
+		if v.position.y > 1200 then
+			table.remove(self.bits,i)
+		end
 	end
 end
 
@@ -268,8 +273,9 @@ function mapScreen:draw()
 	--lg.translate(0,1080 / 2)
 	local energy = self.energy
 	if self.map then drawBranch(0,0, self.map, energy) end
-	self:drawBits()
+	self:drawBits(false)
 	self:drawSpots()
+	self:drawBits(true)
 	lg.pop()
 	self.cam:detach()
 end

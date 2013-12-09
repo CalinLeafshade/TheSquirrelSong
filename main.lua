@@ -12,7 +12,7 @@ system =
 }
 
 local test = require('testScreen')
-
+local splash = require('splashScreen')
 local renderer = require('screenrenderer')
 
 
@@ -25,16 +25,20 @@ function system.load()
 	system.screenObject = require('screenobject')
 	vigScreen = require('vigscreen')
 	mapScreen = require('mapscreen')
+	menuScreen = require('menuscreen')
+	birthScreen = require('birthscreen')
 	renderer:setScreens({
-			test("Test 1", {255,0,0}),
+			splash("gfx/splash.png"),
+			menuScreen,
 			test("Test 2", {255,255,0}),
 			mapScreen,
-			vigScreen
+			vigScreen,
+			birthScreen
 		})
 	system.loadScenes()
 	system.loadVignettes()
-	mapScreen:generateMap({system.vignettes["gent1"],system.vignettes["gent1"],system.vignettes["gent1"]})
-	system.startVignette("gent1")
+	--mapScreen:generateMap({system.vignettes["gent1"],system.vignettes["gent1"],system.vignettes["gent1"]})
+	--system.startVignette("gent1")
 end
 
 function system.startVignette(name)
@@ -45,6 +49,10 @@ function system.startVignette(name)
 			vigScreen:showRects()
 		end)
 	
+end
+
+function system.newGame()
+	system.state:new()
 end
 
 function system.loadDirectory(dir, callback)
@@ -172,7 +180,9 @@ function system.updateCoroutines(dt)
 end
 
 function system.dispatch(block,f,...)
+	local args = {...}
 	if type(block) == "function" then
+		table.insert(args,1,f)
 		f = block
 		block = true
 	end
@@ -181,16 +191,40 @@ function system.dispatch(block,f,...)
 	end
 	local t = {block = block, co = coroutine.create(f)}
 	table.insert(system.threads, t)
-	local result,err = coroutine.resume(t.co, ...)
+	local result,err = coroutine.resume(t.co, unpack(args))
 	if not result then error(err) end
 end
 
-function system.wait(t)
-	local time = 0
-	while time < t do
-		time = time + coroutine.yield()
+function system.waitKey(t,callback)
+	local f = function(t,callback)
+		local time = 0
+		while time < t and not love.keyboard.isDown("escape", "return", "space") do
+			time = time + coroutine.yield()
+		end
+		if callback then callback() end
+		return time
 	end
-	return time
+	if not coroutine.running() then
+		system.dispatch(f,t,callback)
+	else
+		f(t,callback)
+	end
+end
+
+function system.wait(t, callback)
+	local f = function(t,callback)
+		local time = 0
+		while time < t do
+			time = time + coroutine.yield()
+		end
+		if callback then callback() end
+		return time
+	end
+	if not coroutine.running() then
+		system.dispatch(f,t,callback)
+	else
+		f(t,callback)
+	end
 end
 
 function system.log(token, ...)
