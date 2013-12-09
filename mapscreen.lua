@@ -16,21 +16,21 @@ local paperQuad = love.graphics.newQuad(0,0,paper:getWidth() * 3, paper:getHeigh
 local vigTypes = {
 		romantic = {
 				icon = love.graphics.newImage("gfx/heart.png"),
-				hue = { 250, 260 },
-				sat = { 255 * 0.27, 255 * 0.33 },
-				lit = {150,200}
+				hue = 300 * (256 / 360),
+				sat = { 128,255 },
+				lit = 180
 			},
 		intellectual = {
 				icon = love.graphics.newImage("gfx/bulb.png"),
-				hue = { 30, 40 },
-				sat = { 255 * 0.27, 255 * 0.33 },
-				lit = {150,200}
+				hue = 59 * (256 / 360),
+				sat = { 128,255 },
+				lit = 180
 			},
 		general = {
 				icon = love.graphics.newImage("gfx/star.png"),
-				hue = { 145,155 },
-				sat = { 255 * 0.27, 255 * 0.33 },
-				lit = {150,200}
+				hue = 178 * (256 / 360),
+				sat = { 128,255 },
+				lit = 180
 			},
 	}
 
@@ -167,10 +167,11 @@ function mapScreen:newBit(x,y,t)
 	local hue = type(t.hue) == "number" and t.hue or math.random(t.hue[1], t.hue[2])
 	local sat = type(t.sat) == "number" and t.sat or math.random(t.sat[1], t.sat[2])
 	local lit = type(t.lit) == "number" and t.lit or math.random(t.lit[1], t.lit[2])
+	--sat = 0
 	local item = 
 	{
 		position = vector(x,y),
-		velocity = vector((math.random() * (math.pi * 2) - math.pi) * 0.5,-math.random() * 5) * 100,
+		velocity = vector((math.random() * (math.pi * 2) - math.pi) * 0.5,(-math.random() - 1) * 3) * 100,
 		icon = t.icon,
 		rotation = math.random() * math.pi,
 		rotationalSpeed = math.random() * math.pi * 4,
@@ -288,8 +289,18 @@ function mapScreen:update(dt)
 			self.selected = i
 		end
 	end
-	if self.selected > -1 and self.selected ~= lastSelected then -- and love.timer.getTime() - (self.lastBlowOut or 0) > 5 then
-		self:blowOut(self.spots[self.selected].x, self.spots[self.selected].y, "general")
+	if self.selected > -1 then-- and self.selected ~= lastSelected then -- and love.timer.getTime() - (self.lastBlowOut or 0) > 5 then
+		local x,y = self.spots[self.selected].x, self.spots[self.selected].y
+		local ty = system.vignettes[self.spots[self.selected].link].type or table.random({"general","romantic","intellectual"})
+		if type(ty) == "string" then ty = vigTypes[ty] end
+		self.lastBit = self.lastBit or 0
+		self.lastBit = self.lastBit + dt
+		system.log("lol", self.lastBit)
+		while self.lastBit > 0.05 do
+			self:newBit(x,y,ty)
+			self.lastBit = self.lastBit - 0.05
+		end
+		--self:blowOut(self.spots[self.selected].x, self.spots[self.selected].y, "general")
 	end
 	self:updateBits(dt)
 end

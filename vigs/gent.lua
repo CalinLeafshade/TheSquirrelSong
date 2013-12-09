@@ -5,6 +5,7 @@ return {
 		title = "A Gentleman Calls",
 		subtitle = "You are in your room when you hear a knock at the door",
 		scene = "livingroom1",
+		type = "general",
 		nodes = {
 				[1] = {
 						"You are lay ",
