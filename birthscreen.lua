@@ -49,9 +49,14 @@ function birthScreen:update(dt)
 	ps2:update(dt)
 end
 
-function birthScreen:draw()
-	
+function birthScreen:draw(y)
+	lg.push()
+	lg.translate(0,-y)
+	lg.setScissor()
 	bloom:preDraw()
+	lg.clear()
+	lg.setBlendMode("alpha")
+	lg.setColor(255,255,255)
 	lg.draw(ps1,0,0)
 	lg.setBlendMode("subtractive")
 	lg.draw(ps2,0,0)
@@ -59,6 +64,10 @@ function birthScreen:draw()
 	lg.setFont(font)
 	lg.print("This is some test text", 400, 1080 / 2 + math.sin(love.timer.getTime()) * 10)
 	bloom:draw()
+	lg.pop()
+	print("y",y)
+	--lg.setScissor(0,y,1920,1080)
+	bloom:finalDraw()
 end
 
 return birthScreen

@@ -272,10 +272,12 @@ function mapScreen:draw()
 	lg.push()
 	--lg.translate(0,1080 / 2)
 	local energy = self.energy
+	
 	if self.map then drawBranch(0,0, self.map, energy) end
 	self:drawBits(false)
 	self:drawSpots()
 	self:drawBits(true)
+	
 	lg.pop()
 	self.cam:detach()
 end

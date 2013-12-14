@@ -143,25 +143,28 @@ function bloom:draw()
 		
 		
 		
-		shaders.combine:send("BloomIntensity", self.bloomIntensity)
-		shaders.combine:send("BaseIntensity", self.baseIntensity)
-		shaders.combine:send("BloomSaturation", self.bloomSaturation)
-		shaders.combine:send("BaseSaturation", self.baseSaturation)
-		
-		shaders.combine:send("BaseSampler", self.scene)
-		shaders.combine:send("BloomSampler", self.rt1)
-		
-		lg.setShader(shaders.combine)
+
 	
+	
+
+	
+end
+
+function bloom:finalDraw(y)
+	shaders.combine:send("BloomIntensity", self.bloomIntensity)
+	shaders.combine:send("BaseIntensity", self.baseIntensity)
+	shaders.combine:send("BloomSaturation", self.bloomSaturation)
+	shaders.combine:send("BaseSaturation", self.baseSaturation)
+		
+	shaders.combine:send("BaseSampler", self.scene)
+	shaders.combine:send("BloomSampler", self.rt1)
+	
+	lg.setShader(shaders.combine)
 	
 	lg.setCanvas(self.origCanvas)
 	lg.draw(self.scene,0,0)
 	
 	lg.setShader()
-	
-	--lg.draw(self.rt1,0,0)
-	--lg.draw(self.rt2,1920/speedFactor,0)
-
 end
 
 function bloom:setBlur(dx,dy)

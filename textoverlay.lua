@@ -7,8 +7,10 @@ local overlay =
 function overlay:makeCanvas(wordList)
 	local canvas = love.graphics.newCanvas(1920,1080)
 	local lg = love.graphics
+	local oldCanvas = lg.getCanvas()
+	
 	lg.setCanvas(canvas)
-	lg.setBackgroundColor(0,0,0,0)
+	--lg.setBackgroundColor(0,0,0,0)
 	lg.clear()
 	lg.setColor(26,20,16)
 	lg.rectangle("fill", 0,0,1920,1080)
@@ -45,7 +47,8 @@ function overlay:makeCanvas(wordList)
 		lg.print(word,x,y,0,scale,scale)
 	end
 	lg.setBlendMode("alpha")
-	lg.setCanvas()
+	lg.setCanvas(oldCanvas)
+	
 	return canvas
 end
 

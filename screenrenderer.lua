@@ -22,11 +22,14 @@ end
 function screenRenderer:draw()
 	for i,v in ipairs(self.screens) do
 		local screenY = (i-1) * self.height - self.y
-		if screenY >= -self.height and screenY < self.height then
+		if screenY > -self.height and screenY < self.height then
 			love.graphics.push()
 			love.graphics.translate(0,screenY)
+			print(screenY)
 			love.graphics.setScissor(0,screenY,1920,1080)
-			v:draw()
+			local c = love.graphics.getCanvas()
+			v:draw(screenY)
+			assert(c == love.graphics.getCanvas(), i .. " did not reset canvas")
 			love.graphics.setScissor()
 			love.graphics.pop()
 		end

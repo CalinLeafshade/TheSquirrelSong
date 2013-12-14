@@ -123,6 +123,7 @@ end
 
 function system.draw()
 	local lg = love.graphics
+	lg.clear()
 	lg.setCanvas(system.canvas)
 	lg.clear()
 	--love.graphics.push()
