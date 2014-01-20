@@ -119,8 +119,9 @@ function vigScreen:showRects()
 		speed = speed or 1
 		local t = 0
 		while t < speed do
-			r.scale = interp(t,0,1,speed,0.5,0.3)
 			t = t + coroutine.yield()
+			t = math.min(t,speed)
+			r.scale = interp(t,0,1,speed,0.5,0.3)
 		end
 	end
 	for i,v in ipairs(self.rects) do

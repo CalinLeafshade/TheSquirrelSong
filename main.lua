@@ -15,9 +15,6 @@ local test = require('testScreen')
 local splash = require('splashScreen')
 local renderer = require('screenrenderer')
 
-
-
-
 function system.load()
 	system.canvas = love.graphics.newCanvas(1920,1080)
 	system.canvas:setFilter("linear","linear",16)
